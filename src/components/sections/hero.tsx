@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/language-context";
 import { WHATSAPP_URL } from "@/lib/translations";
 import { Reveal } from "@/components/ui/reveal";
 import { PreviewMockup } from "@/components/ui/asset-mockups";
+import { media } from "@/config/media";
 
 export function Hero() {
   const { t } = useLanguage();
@@ -63,7 +64,21 @@ export function Hero() {
         <Reveal delay={120} className="relative">
           <div className="relative mx-auto max-w-md">
             <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br from-[var(--accent)]/15 to-transparent blur-2xl" />
-            <PreviewMockup assetId="CLASSIFIED_PREVIEW_01" active={t.hero.cardBadge} />
+            {media.INTRO_VIDEO.enabled ? (
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[1.4rem] border border-[var(--border)] bg-[var(--surface-2)] shadow-[var(--shadow-soft)]">
+                <video
+                  src={media.INTRO_VIDEO.path}
+                  poster={media.PHYSICS_GRADE9_COVER.enabled ? media.PHYSICS_GRADE9_COVER.path : undefined}
+                  className="h-full w-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              </div>
+            ) : (
+              <PreviewMockup assetId="CLASSIFIED_PREVIEW_01" active={t.hero.cardBadge} />
+            )}
             <div className="glass card-surface absolute -bottom-6 start-4 flex items-center gap-3 rounded-2xl px-4 py-3 sm:-start-8">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--navy-900)] text-[var(--ice-300)]">
                 <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -93,3 +108,4 @@ export function Hero() {
     </section>
   );
 }
+

@@ -220,11 +220,11 @@ export const dict = {
       title: "Choose Your Package",
       subtitle: "Simple, transparent packages. Final pricing provided upon contact.",
       priceLabel: "Price",
-      priceValue: "Contact for pricing",
+      egp: "EGP",
       cta: "Choose This Package",
       mostPopular: "Most Popular",
-      grade9: { title: "Grade 9", desc: "Physics OL — Grade 9", items: ["Paper 1, 3 & 6", "Classified by chapter & topic", "Years 2020–2026", "Personalization available"] },
-      grade10: { title: "Grade 10", desc: "Physics OL — Grade 10", items: ["Paper 2, 4 & 6", "Classified by chapter & topic", "Years 2020–2026", "Personalization available"] },
+      grade9: { title: "Grade 9", desc: "Physics OL — Grade 9", price: "2,500", items: ["Paper 1, 3 & 6", "Classified by chapter & topic", "Years 2020–2026", "Personalization available"] },
+      grade10: { title: "Grade 10", desc: "Physics OL — Grade 10", price: "4,000", items: ["Paper 2, 4 & 6", "Classified by chapter & topic", "Years 2020–2026", "Personalization available"] },
       combined: { title: "Grade 9 + Grade 10", desc: "The complete combined package", items: ["All papers, both grades", "Classified by chapter & topic", "Years 2020–2026", "Personalization available"] },
     },
     offer: {
@@ -235,6 +235,7 @@ export const dict = {
       availability: "Spots remaining",
       of: "of",
       cta: "Claim This Offer",
+      packageLabel: "Grade 9 + Grade 10 (Special Offer)",
     },
     comparison: {
       eyebrow: "Compare Packages",
@@ -245,6 +246,17 @@ export const dict = {
         grade10: ["Paper 2, 4, 6", "Chapter & Topic", "2020–2026", true, true, true, true, true],
         combined: ["All Papers", "Chapter & Topic", "2020–2026", true, true, true, true, true],
       },
+    },
+    payment: {
+      eyebrow: "Payment Method",
+      title: "How Payment Works",
+      desc: "A 50% deposit through InstaPay confirms your order — the remaining balance is paid upon delivery.",
+      instapayLabel: "InstaPay Number",
+      copy: "Copy Number",
+      copied: "Copied!",
+      step1: "Pay a 50% deposit via InstaPay to start the work.",
+      step2: "Pay the remaining 50% balance when your according is delivered.",
+      note: "Need help sending the deposit? Message us on WhatsApp any time.",
     },
     upcoming: {
       eyebrow: "Upcoming Subjects",
@@ -316,7 +328,14 @@ export const dict = {
       submitting: "Sending…",
       success: "Thank you! We received your request and will contact you soon.",
       error: "Something went wrong. Please try WhatsApp instead.",
-      interests: ["Grade 9", "Grade 10", "Grade 9 + Grade 10", "Custom Design", "General Inquiry"],
+      interests: [
+        "Grade 9",
+        "Grade 10",
+        "Grade 9 + Grade 10",
+        "Grade 9 + Grade 10 (Special Offer)",
+        "Custom Design",
+        "General Inquiry",
+      ],
     },
     footer: {
       desc: "Classified IGCSE resources built for teachers.",
@@ -528,13 +547,13 @@ export const dict = {
     packages: {
       eyebrow: "الباقات",
       title: "اختر باقتك",
-      subtitle: "باقات بسيطة وواضحة. السعر النهائي يُقدَّم عند التواصل.",
+      subtitle: "باقات بسيطة وواضحة بأسعار محددة.",
       priceLabel: "السعر",
-      priceValue: "تواصل لمعرفة السعر",
+      egp: "جنيه",
       cta: "اختر هذه الباقة",
       mostPopular: "الأكثر طلبًا",
-      grade9: { title: "الصف التاسع", desc: "Physics OL — الصف التاسع", items: ["Paper 1 و 3 و 6", "مصنّف حسب الفصل والموضوع", "سنوات 2020–2026", "التخصيص متاح"] },
-      grade10: { title: "الصف العاشر", desc: "Physics OL — الصف العاشر", items: ["Paper 2 و 4 و 6", "مصنّف حسب الفصل والموضوع", "سنوات 2020–2026", "التخصيص متاح"] },
+      grade9: { title: "الصف التاسع", desc: "Physics OL — الصف التاسع", price: "2,500", items: ["Paper 1 و 3 و 6", "مصنّف حسب الفصل والموضوع", "سنوات 2020–2026", "التخصيص متاح"] },
+      grade10: { title: "الصف العاشر", desc: "Physics OL — الصف العاشر", price: "4,000", items: ["Paper 2 و 4 و 6", "مصنّف حسب الفصل والموضوع", "سنوات 2020–2026", "التخصيص متاح"] },
       combined: { title: "الصف التاسع + العاشر", desc: "الباقة المجمعة الكاملة", items: ["كل الأوراق لكلا الصفين", "مصنّف حسب الفصل والموضوع", "سنوات 2020–2026", "التخصيص متاح"] },
     },
     offer: {
@@ -545,6 +564,7 @@ export const dict = {
       availability: "الأماكن المتبقية",
       of: "من",
       cta: "احصل على هذا العرض",
+      packageLabel: "الصف التاسع + العاشر (عرض خاص)",
     },
     comparison: {
       eyebrow: "قارن بين الباقات",
@@ -555,6 +575,17 @@ export const dict = {
         grade10: ["Paper 2, 4, 6", "حسب الفصل والموضوع", "2020–2026", true, true, true, true, true],
         combined: ["كل الأوراق", "حسب الفصل والموضوع", "2020–2026", true, true, true, true, true],
       },
+    },
+    payment: {
+      eyebrow: "طريقة الدفع",
+      title: "كيف تتم عملية الدفع",
+      desc: "عربون 50% عبر InstaPay يؤكد طلبك — ويُدفع الباقي عند التسليم.",
+      instapayLabel: "رقم InstaPay",
+      copy: "نسخ الرقم",
+      copied: "تم النسخ!",
+      step1: "ادفع عربون 50% عبر InstaPay لبدء العمل.",
+      step2: "ادفع باقي الـ50% عند تسليم الأكوردنج الخاص بك.",
+      note: "تحتاج مساعدة في إرسال العربون؟ راسلنا على واتساب في أي وقت.",
     },
     upcoming: {
       eyebrow: "مواد قادمة",
@@ -626,7 +657,14 @@ export const dict = {
       submitting: "جارٍ الإرسال…",
       success: "شكرًا لك! تم استلام طلبك وسنتواصل معك قريبًا.",
       error: "حدث خطأ ما. برجاء المحاولة عبر واتساب.",
-      interests: ["الصف التاسع", "الصف العاشر", "الصف التاسع + العاشر", "تصميم مخصص", "استفسار عام"],
+      interests: [
+        "الصف التاسع",
+        "الصف العاشر",
+        "الصف التاسع + العاشر",
+        "الصف التاسع + العاشر (عرض خاص)",
+        "تصميم مخصص",
+        "استفسار عام",
+      ],
     },
     footer: {
       desc: "مصادر آي جي سي إس إي مصنّفة، مبنية للمعلمين.",
@@ -668,3 +706,4 @@ export const dict = {
 
 export type Dictionary = Widen<typeof dict.en>;
 export type NavItems = Widen<typeof nav.en>;
+

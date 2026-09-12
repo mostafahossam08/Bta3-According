@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useLanguage } from "@/contexts/language-context";
+import { media } from "@/config/media";
 
 /**
  * Modular "asset placeholder" system.
@@ -30,12 +31,18 @@ function AssetFrame({
   children: ReactNode;
   label?: string;
 }) {
+  const asset = media[assetId];
   return (
     <div
       data-asset={assetId}
       className={`group relative w-full ${ratio} overflow-hidden rounded-[1.4rem] border border-[var(--border)] bg-[var(--surface-2)] shadow-[var(--shadow-soft)] transition-transform duration-500 ease-out hover:-translate-y-1`}
     >
-      {children}
+      {asset?.enabled ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={asset.path} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      ) : (
+        children
+      )}
       {label ? (
         <span className="absolute end-3 top-3 rounded-full border border-white/25 bg-black/35 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
           {label}
@@ -159,3 +166,4 @@ export function PersonalizedMockup({ assetId, teacherLabel }: { assetId: string;
     </AssetFrame>
   );
 }
+

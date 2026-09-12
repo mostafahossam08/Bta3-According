@@ -1,12 +1,23 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useLanguage } from "@/contexts/language-context";
+import { useOrderSelection } from "@/contexts/order-selection-context";
 
 export function LeadForm() {
   const { t, locale } = useLanguage();
+  const { selected } = useOrderSelection();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [interest, setInterest] = useState(t.contact.interests[0]);
+
+  // Auto-populate the interest field when the visitor arrives here via an
+  // Order button on Packages / Special Offer — they should never have to
+  // pick the package again manually.
+  useEffect(() => {
+    if (selected && t.contact.interests.includes(selected)) {
+      setInterest(selected);
+    }
+  }, [selected, t.contact.interests]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

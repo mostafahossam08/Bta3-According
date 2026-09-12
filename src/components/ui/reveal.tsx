@@ -43,3 +43,4 @@ export function Reveal({ children, delay = 0, className = "", as = "div" }: Reve
     </Comp>
   );
 }
+

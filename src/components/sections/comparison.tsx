@@ -85,3 +85,4 @@ export function Comparison() {
     </section>
   );
 }
+

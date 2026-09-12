@@ -10,6 +10,7 @@ import { CustomDesign } from "@/components/sections/custom-design";
 import { AvailableNow } from "@/components/sections/available-now";
 import { ExamYears } from "@/components/sections/exam-years";
 import { Packages } from "@/components/sections/packages";
+import { SpecialOffer } from "@/components/sections/special-offer";
 import { Comparison } from "@/components/sections/comparison";
 import { Upcoming } from "@/components/sections/upcoming";
 import { ExamBoards } from "@/components/sections/exam-boards";
@@ -17,6 +18,7 @@ import { WhoFor } from "@/components/sections/who-for";
 import { UseCases } from "@/components/sections/use-cases";
 import { Vision } from "@/components/sections/vision";
 import { FAQ } from "@/components/sections/faq";
+import { PaymentMethod } from "@/components/sections/payment-method";
 import { Contact } from "@/components/sections/contact";
 
 export default function HomePage() {
@@ -34,6 +36,7 @@ export default function HomePage() {
       <AvailableNow />
       <ExamYears />
       <Packages />
+      <SpecialOffer />
       <Comparison />
       <Upcoming />
       <ExamBoards />
@@ -41,7 +44,9 @@ export default function HomePage() {
       <UseCases />
       <Vision />
       <FAQ />
+      <PaymentMethod />
       <Contact />
     </main>
   );
 }
+

@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/contexts/language-context";
+import { media } from "@/config/media";
 
 /**
  * BRAND_LOGO placeholder.
@@ -41,7 +42,16 @@ export function Logo({
 
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`} data-asset="BRAND_LOGO">
-      <LogoMark className="h-9 w-9 shrink-0 sm:h-10 sm:w-10" />
+      {media.BRAND_LOGO.enabled ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={media.BRAND_LOGO.path}
+          alt={t.brand.name}
+          className="h-9 w-9 shrink-0 rounded-[11px] object-cover sm:h-10 sm:w-10"
+        />
+      ) : (
+        <LogoMark className="h-9 w-9 shrink-0 sm:h-10 sm:w-10" />
+      )}
       <span className="flex flex-col leading-none">
         <span className={`text-[15px] font-bold tracking-tight sm:text-[17px] ${wordmarkColor}`}>{t.brand.name}</span>
         <span
@@ -55,3 +65,4 @@ export function Logo({
     </span>
   );
 }
+
