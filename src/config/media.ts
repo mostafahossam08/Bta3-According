@@ -26,7 +26,7 @@ export interface MediaAsset {
 }
 
 export const media: Record<string, MediaAsset> = {
-  BRAND_LOGO: { path: "/images/logo.png", enabled: false },
+  BRAND_LOGO: { path: "/images/logo.png", enabled: true },
   INTRO_VIDEO: { path: "/video/intro.mp4", enabled: false },
   PHYSICS_GRADE9_COVER: { path: "/images/grade9-cover.jpg", enabled: false },
   PHYSICS_GRADE10_COVER: { path: "/images/grade10-cover.jpg", enabled: false },
