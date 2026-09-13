@@ -6,9 +6,11 @@ import { WHATSAPP_URL } from "@/lib/translations";
 export function FloatingWhatsApp() {
   const { t, dir } = useLanguage();
 
+  const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(t.whatsapp.message)}`;
+
   return (
     <a
-      href={WHATSAPP_URL}
+      href={whatsappHref}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={t.nav.contact}
@@ -23,4 +25,3 @@ export function FloatingWhatsApp() {
     </a>
   );
 }
-

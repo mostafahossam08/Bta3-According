@@ -8,6 +8,8 @@ import { LeadForm } from "@/components/lead-form";
 export function Contact() {
   const { t } = useLanguage();
 
+  const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(t.whatsapp.message)}`;
+
   return (
     <section id="contact" className="relative overflow-hidden bg-[linear-gradient(170deg,var(--navy-900),var(--navy-950))] py-20 text-white sm:py-28">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.06]" />
@@ -22,7 +24,7 @@ export function Contact() {
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               <a
-                href={WHATSAPP_URL}
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-whatsapp inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-semibold"
@@ -55,4 +57,3 @@ export function Contact() {
     </section>
   );
 }
-

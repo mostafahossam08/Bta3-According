@@ -8,6 +8,8 @@ import { PersonalizedMockup } from "@/components/ui/asset-mockups";
 export function CustomDesign() {
   const { t } = useLanguage();
 
+  const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(t.whatsapp.message)}`;
+
   return (
     <section className="bg-[var(--bg-soft)] py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -31,7 +33,7 @@ export function CustomDesign() {
             </ul>
 
             <a
-              href={WHATSAPP_URL}
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary mt-8 inline-flex items-center justify-center rounded-full px-7 py-3.5 text-[15px] font-semibold"
@@ -48,4 +50,3 @@ export function CustomDesign() {
     </section>
   );
 }
-

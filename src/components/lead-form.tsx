@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useLanguage } from "@/contexts/language-context";
 import { useOrderSelection } from "@/contexts/order-selection-context";
+import { WHATSAPP_URL } from "@/lib/translations";
 
 export function LeadForm() {
   const { t, locale } = useLanguage();
@@ -24,20 +25,39 @@ export function LeadForm() {
     setStatus("loading");
     const form = new FormData(event.currentTarget);
 
+    const name = (form.get("name") as string) || "";
+    const phone = (form.get("phone") as string) || "";
+    const email = (form.get("email") as string) || "";
+    const interestValue = (form.get("interest") as string) || "";
+    const message = (form.get("message") as string) || "";
+
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: form.get("name"),
-          phone: form.get("phone"),
-          email: form.get("email"),
-          interest: form.get("interest"),
-          message: form.get("message"),
+          name,
+          phone,
+          email,
+          interest: interestValue,
+          message,
           locale,
         }),
       });
       if (!res.ok) throw new Error("failed");
+
+      const lines = [
+        `${t.contact.name}: ${name}`,
+        `${t.contact.phone}: ${phone}`,
+      ];
+      if (email) lines.push(`${t.contact.email}: ${email}`);
+      lines.push(`${t.contact.interest}: ${interestValue}`);
+      if (message) lines.push(`${t.contact.message}: ${message}`);
+
+      const whatsappText = lines.join("\n");
+      const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(whatsappText)}`;
+      window.open(whatsappHref, "_blank", "noopener,noreferrer");
+
       setStatus("success");
       event.currentTarget.reset();
       setInterest(t.contact.interests[0]);
