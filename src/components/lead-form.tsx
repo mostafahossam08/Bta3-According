@@ -31,6 +31,28 @@ export function LeadForm() {
     const interestValue = (form.get("interest") as string) || "";
     const message = (form.get("message") as string) || "";
 
+    // Build the WhatsApp message and open it immediately — this must never
+    // be blocked by the backend lead-saving call below.
+    const lines = [
+      `${t.contact.name}: ${name}`,
+      `${t.contact.phone}: ${phone}`,
+    ];
+    if (email) lines.push(`${t.contact.email}: ${email}`);
+    lines.push(`${t.contact.interest}: ${interestValue}`);
+    if (message) lines.push(`${t.contact.message}: ${message}`);
+
+    const whatsappText = lines.join("\n");
+    const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(whatsappText)}`;
+    window.open(whatsappHref, "_blank", "noopener,noreferrer");
+
+    setStatus("success");
+    event.currentTarget.reset();
+    setInterest(t.contact.interests[0]);
+
+    // Best-effort: try to save the lead to the database in the background.
+    // If this fails (e.g. DB connection issue), it must NOT affect the
+    // WhatsApp redirect or show an error to the visitor — they already
+    // have what they need.
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
@@ -44,25 +66,11 @@ export function LeadForm() {
           locale,
         }),
       });
-      if (!res.ok) throw new Error("failed");
-
-      const lines = [
-        `${t.contact.name}: ${name}`,
-        `${t.contact.phone}: ${phone}`,
-      ];
-      if (email) lines.push(`${t.contact.email}: ${email}`);
-      lines.push(`${t.contact.interest}: ${interestValue}`);
-      if (message) lines.push(`${t.contact.message}: ${message}`);
-
-      const whatsappText = lines.join("\n");
-      const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(whatsappText)}`;
-      window.open(whatsappHref, "_blank", "noopener,noreferrer");
-
-      setStatus("success");
-      event.currentTarget.reset();
-      setInterest(t.contact.interests[0]);
-    } catch {
-      setStatus("error");
+      if (!res.ok) {
+        console.error("Failed to save lead to database", await res.text());
+      }
+    } catch (error) {
+      console.error("Failed to save lead to database", error);
     }
   }
 
