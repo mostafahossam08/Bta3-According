@@ -1,153 +1,38 @@
-"use client";
+import { NextResponse } from "next/server";
+import { db } from "@/db";
+import { leads } from "@/db/schema";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { useLanguage } from "@/contexts/language-context";
-import { useOrderSelection } from "@/contexts/order-selection-context";
-import { WHATSAPP_URL } from "@/lib/translations";
+export const dynamic = "force-dynamic";
 
-export function LeadForm() {
-  const { t, locale } = useLanguage();
-  const { selected } = useOrderSelection();
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [interest, setInterest] = useState(t.contact.interests[0]);
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+    const phone = typeof body.phone === "string" ? body.phone.trim() : "";
+    const email = typeof body.email === "string" ? body.email.trim() : "";
+    const interest = typeof body.interest === "string" ? body.interest.trim() : "general";
+    const message = typeof body.message === "string" ? body.message.trim() : "";
+    const locale = body.locale === "ar" ? "ar" : "en";
 
-  // Auto-populate the interest field when the visitor arrives here via an
-  // Order button on Packages / Special Offer — they should never have to
-  // pick the package again manually.
-  useEffect(() => {
-    if (selected && t.contact.interests.includes(selected)) {
-      setInterest(selected);
-    }
-  }, [selected, t.contact.interests]);
-
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus("loading");
-    const form = new FormData(event.currentTarget);
-
-    const name = (form.get("name") as string) || "";
-    const phone = (form.get("phone") as string) || "";
-    const email = (form.get("email") as string) || "";
-    const interestValue = (form.get("interest") as string) || "";
-    const message = (form.get("message") as string) || "";
-
-    // Try to save the lead to the database, but never let a failure here
-    // block the primary action: opening WhatsApp with the visitor's info.
-    try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          phone,
-          email,
-          interest: interestValue,
-          message,
-          locale,
-        }),
-      });
-      if (!res.ok) throw new Error("failed");
-    } catch (error) {
-      console.error("Failed to save lead", error);
+    if (!name || !phone) {
+      return NextResponse.json({ ok: false, error: "Name and phone are required." }, { status: 400 });
     }
 
-    try {
-      const lines = [
-        `${t.contact.name}: ${name}`,
-        `${t.contact.phone}: ${phone}`,
-      ];
-      if (email) lines.push(`${t.contact.email}: ${email}`);
-      lines.push(`${t.contact.interest}: ${interestValue}`);
-      if (message) lines.push(`${t.contact.message}: ${message}`);
+    const [created] = await db
+      .insert(leads)
+      .values({
+        name: name.slice(0, 160),
+        phone: phone.slice(0, 60),
+        email: email ? email.slice(0, 160) : undefined,
+        interest: interest.slice(0, 80),
+        message: message ? message.slice(0, 2000) : undefined,
+        locale,
+      })
+      .returning({ id: leads.id });
 
-      const whatsappText = lines.join("\n");
-      const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(whatsappText)}`;
-      window.open(whatsappHref, "_blank", "noopener,noreferrer");
-
-      setStatus("success");
-      event.currentTarget.reset();
-      setInterest(t.contact.interests[0]);
-    } catch (error) {
-      console.error("Failed to open WhatsApp", error);
-      setStatus("error");
-    }
+    return NextResponse.json({ ok: true, id: created?.id });
+  } catch (error) {
+    console.error("Failed to create lead", error);
+    return NextResponse.json({ ok: false, error: "Unexpected error" }, { status: 500 });
   }
-
-  return (
-    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <div className="sm:col-span-1">
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-          {t.contact.name}
-        </label>
-        <input
-          required
-          name="name"
-          type="text"
-          className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent)]"
-        />
-      </div>
-      <div className="sm:col-span-1">
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-          {t.contact.phone}
-        </label>
-        <input
-          required
-          name="phone"
-          type="tel"
-          dir="ltr"
-          className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent)]"
-        />
-      </div>
-      <div className="sm:col-span-1">
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-          {t.contact.email}
-        </label>
-        <input
-          name="email"
-          type="email"
-          dir="ltr"
-          className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent)]"
-        />
-      </div>
-      <div className="sm:col-span-1">
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-          {t.contact.interest}
-        </label>
-        <select
-          name="interest"
-          value={interest}
-          onChange={(e) => setInterest(e.target.value)}
-          className="w-full rounded-xl border border-[var(--border-strong)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent)]"
-        >
-          {t.contact.interests.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="sm:col-span-2">
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-          {t.contact.message}
-        </label>
-        <textarea
-          name="message"
-          rows={3}
-          className="w-full resize-none rounded-xl border border-[var(--border-strong)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--accent)]"
-        />
-      </div>
-
-      <div className="sm:col-span-2">
-        <button type="submit" disabled={status === "loading"} className="btn-primary w-full rounded-full px-6 py-3.5 text-sm font-semibold disabled:opacity-60">
-          {status === "loading" ? t.contact.submitting : t.contact.submit}
-        </button>
-        {status === "success" ? (
-          <p className="mt-3 text-center text-sm font-semibold text-emerald-600 dark:text-emerald-400">{t.contact.success}</p>
-        ) : null}
-        {status === "error" ? (
-          <p className="mt-3 text-center text-sm font-semibold text-red-500">{t.contact.error}</p>
-        ) : null}
-      </div>
-    </form>
-  );
 }
